@@ -5,20 +5,8 @@ public class Product {
     private String sku;
     private String name;
     private String description;
-    // other fields as needed
 
-
-    public Product(int id, String sku, String name, String description) {
-        this.id = id;
-        this.sku = sku;
-        this.name = name;
-        this.description = description;
-    }
-
-    public Product() {
-
-    }
-
+    // Getters and Setters
     public int getId() {
         return id;
     }
