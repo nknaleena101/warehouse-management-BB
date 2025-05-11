@@ -1,0 +1,61 @@
+/* Main layout */
+html, body {
+    height: 100%;
+    overflow-x: hidden;
+}
+
+.main-content {
+    flex: 1;
+    padding: 20px;
+}
+/* Ensure proper sidebar and main content layout */
+.sidebar {
+    width: 280px;
+    min-height: 100vh;
+    position: fixed;
+    left: 0;
+    top: 0;
+}
+
+.main-content {
+    margin-left: 280px; /* Same as sidebar width */
+    width: calc(100% - 280px);
+    padding: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .sidebar {
+        width: 220px !important;
+    }
+    .main-content {
+        margin-left: 220px;
+    }
+}
+
+@media (max-width: 768px) {
+    .sidebar {
+        width: 100% !important;
+        height: auto !important;
+        position: relative;
+    }
+    .main-content {
+        margin-left: 0;
+    }
+}
+
+/* Card styling */
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+    transition: all 0.3s;
+}
+
+.card:hover {
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,0.15);
+}
+
+/* Quick action buttons */
+.btn-action {
+    min-width: 120px;
+    margin: 5px;
+}
