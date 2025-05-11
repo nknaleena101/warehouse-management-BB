@@ -36,7 +36,6 @@ public class DashboardServlet extends HttpServlet {
                     "ASN ID: " + asn.getAsnId() +
                             " Supplier: " + asn.getSupplierName()
             ));
-            System.out.println("Fetched " + recentASNs.size() + " ASNs"); // Debug line
 
             request.setAttribute("recentASNs", recentASNs);
             request.getRequestDispatcher("/jsp/dashboard.jsp").forward(request, response);

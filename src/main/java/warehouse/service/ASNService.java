@@ -1,7 +1,9 @@
 package warehouse.service;
 
 import warehouse.dao.ASNDao;
+import warehouse.dao.ProductDao;
 import warehouse.model.ASN;
+import warehouse.model.Product;
 import warehouse.util.DatabaseUtil;
 
 import java.sql.Connection;
@@ -13,27 +15,19 @@ import java.util.Collections;
 import java.util.List;
 
 public class ASNService {
-    private ASNDao asnDao;
+    private final ASNDao asnDao;
+    private final ProductDao productDao;
 
     public ASNService() {
         this.asnDao = new ASNDao();
-    }
-
-    public boolean createASN(ASN asn) {
-        try {
-            asnDao.createASN(asn);
-            return true;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
+        this.productDao = new ProductDao(); // Initialize ProductDao
     }
 
     public List<ASN> getAllASNs() {
         try {
             List<ASN> asns = asnDao.getAllASNs();
+            // Make sure to load items for each ASN
             for (ASN asn : asns) {
-                // Make sure this line is loading items for each ASN
                 asn.setItems(asnDao.getItemsForASN(asn.getAsnId()));
             }
             return asns;
@@ -85,5 +79,33 @@ public class ASNService {
             }
         }
         return asns;
+    }
+    // Add this method to your ASNService class
+    public List<Product> getAllProducts() {
+        try {
+            return productDao.getAllProducts();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
+    }
+
+    public boolean createASN(ASN asn) {
+        try {
+            asnDao.createASN(asn);
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public void recordInspection(int asnId, String inspectorName, String notes, boolean passed)
+            throws SQLException {
+        // Update ASN status
+        asnDao.updateASNStatus(asnId, passed ? "Inspected" : "Inspection Failed");
+
+        // Record inspection details (you'll need to create this table)
+        asnDao.recordInspectionDetails(asnId, inspectorName, notes, passed);
     }
 }
