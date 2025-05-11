@@ -23,10 +23,8 @@
             <tr>
                 <th>ASN ID</th>
                 <th>Supplier</th>
-                <th>Expected Delivery</th>
+                <th>Items</th>
                 <th>Status</th>
-                <th>Created At</th>
-                <th>Actions</th>
             </tr>
         </thead>
         <tbody>
@@ -34,12 +32,21 @@
                 <tr>
                     <td>${asn.asnId}</td>
                     <td>${asn.supplierName}</td>
-                    <td><fmt:formatDate value="${asn.expectedDeliveryDate}" pattern="yyyy-MM-dd"/></td>
-                    <td>${asn.status}</td>
-                    <td><fmt:formatDate value="${asn.createdAt}" pattern="yyyy-MM-dd HH:mm"/></td>
                     <td>
-                        <a href="${pageContext.request.contextPath}/asn/details?id=${asn.asnId}">View</a>
+                        <c:choose>
+                            <c:when test="${not empty asn.items}">
+                                <ul>
+                                    <c:forEach items="${asn.items}" var="item">
+                                        <li>Product ${item.productId}: ${item.quantity} units</li>
+                                    </c:forEach>
+                                </ul>
+                            </c:when>
+                            <c:otherwise>
+                                No items
+                            </c:otherwise>
+                        </c:choose>
                     </td>
+                    <td>${asn.status}</td>
                 </tr>
             </c:forEach>
         </tbody>
