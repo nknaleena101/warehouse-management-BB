@@ -10,28 +10,46 @@ import java.util.List;
 
 public class ASNDao {
     public void createASN(ASN asn) throws SQLException {
-        String sql = "INSERT INTO asn_data (supplier_name, expected_delivery_date, status) VALUES (?, ?, ?)";
+        Connection conn = null;
+        try {
+            conn = DatabaseUtil.getConnection();
+            conn.setAutoCommit(false); // Start transaction
 
-        try (Connection conn = DatabaseUtil.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            // 1. Insert ASN header
+            String asnSql = "INSERT INTO asn_data (supplier_name, expected_delivery_date, status) VALUES (?, ?, ?)";
+            try (PreparedStatement asnStmt = conn.prepareStatement(asnSql, Statement.RETURN_GENERATED_KEYS)) {
+                asnStmt.setString(1, asn.getSupplierName());
+                asnStmt.setDate(2, new java.sql.Date(asn.getExpectedDeliveryDate().getTime()));
+                asnStmt.setString(3, asn.getStatus());
 
-            stmt.setString(1, asn.getSupplierName());
-            stmt.setDate(2, new java.sql.Date(asn.getExpectedDeliveryDate().getTime()));
-            stmt.setString(3, asn.getStatus());
+                asnStmt.executeUpdate();
 
-            int affectedRows = stmt.executeUpdate();
+                // Get generated ASN ID
+                try (ResultSet generatedKeys = asnStmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int asnId = generatedKeys.getInt(1);
+                        asn.setAsnId(asnId);
 
-            if (affectedRows == 0) {
-                throw new SQLException("Creating ASN failed, no rows affected.");
-            }
-
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    asn.setAsnId(generatedKeys.getInt(1));
-                } else {
-                    throw new SQLException("Creating ASN failed, no ID obtained.");
+                        // 2. Insert ASN items
+                        String itemSql = "INSERT INTO asn_items (asn_id, product_id, quantity) VALUES (?, ?, ?)";
+                        try (PreparedStatement itemStmt = conn.prepareStatement(itemSql)) {
+                            for (ASNItem item : asn.getItems()) {
+                                itemStmt.setInt(1, asnId);
+                                itemStmt.setInt(2, item.getProductId());
+                                itemStmt.setInt(3, item.getQuantity());
+                                itemStmt.addBatch();
+                            }
+                            itemStmt.executeBatch();
+                        }
+                    }
                 }
             }
+            conn.commit(); // Commit transaction
+        } catch (SQLException e) {
+            if (conn != null) conn.rollback();
+            throw e;
+        } finally {
+            if (conn != null) conn.setAutoCommit(true);
         }
     }
 
@@ -67,15 +85,16 @@ public class ASNDao {
             stmt.setInt(1, asnId);
             try (ResultSet rs = stmt.executeQuery()) {
                 while (rs.next()) {
-                    items.add(new ASNItem(
-                            rs.getInt("item_id"),
-                            rs.getInt("asn_id"),
-                            rs.getInt("product_id"),
-                            rs.getInt("quantity")
-                    ));
+                    ASNItem item = new ASNItem();
+                    item.setItemId(rs.getInt("item_id"));
+                    item.setAsnId(rs.getInt("asn_id"));
+                    item.setProductId(rs.getInt("product_id"));
+                    item.setQuantity(rs.getInt("quantity"));
+                    items.add(item);
                 }
             }
         }
+        System.out.println("[DEBUG] Loaded " + items.size() + " items for ASN " + asnId);
         return items;
     }
 }

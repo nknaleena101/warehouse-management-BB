@@ -23,7 +23,14 @@ public class ASNListServlet extends HttpServlet {
             throws ServletException, IOException {
 
         List<ASN> asnList = asnService.getAllASNs();
-        request.setAttribute("/jsp/asnList", asnList);
+        System.out.println("[DEBUG] Found " + asnList.size() + " ASNs"); // Add this line
+
+        for (ASN asn : asnList) {
+            System.out.println("[DEBUG] ASN ID: " + asn.getAsnId() +
+                    " has " + (asn.getItems() != null ? asn.getItems().size() : 0) + " items");
+        }
+
+        request.setAttribute("asnList", asnList);
         request.getRequestDispatcher("/jsp/asnList.jsp").forward(request, response);
     }
 }

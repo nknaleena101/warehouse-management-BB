@@ -38,7 +38,8 @@
 
         <div>
             <label for="expectedDeliveryDate">Expected Delivery Date:</label>
-            <input type="date" id="expectedDeliveryDate" name="expectedDeliveryDate" required>
+            <input type="date" id="expectedDeliveryDate" name="expectedDeliveryDate" required
+                   pattern="\d{4}-\d{2}-\d{2}" placeholder="YYYY-MM-DD">
         </div>
 
         <h3>Items</h3>
