@@ -111,6 +111,44 @@
         </div>
     </div>
 
+    <!-- View Locations Modal -->
+    <div class="modal fade" id="viewLocationsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">All Locations</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Zone</th>
+                                    <th>Rack</th>
+                                    <th>Shelf</th>
+                                </tr>
+                            </thead>
+                            <tbody id="locationsTableBody">
+                                <!-- Data will be inserted here -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- jQuery first -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Then Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+
     <script>
     $(document).ready(function() {
         // Handle form submission
@@ -141,6 +179,48 @@
     });
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        // Load locations when modal opens
+        $('#viewLocationsModal').on('show.bs.modal', function() {
+            console.log("Loading locations...");
+
+            $.ajax({
+                url: 'getLocations',
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    console.log("Received data:", data);
+
+                    var tableBody = $('#locationsTableBody');
+                    tableBody.empty(); // Clear existing rows
+
+                    if(data && data.length > 0) {
+                        // Add each location as a table row
+                        $.each(data, function(index, location) {
+                            var row = $('<tr>');
+                            row.append($('<td>').text(location.locationId));
+                            row.append($('<td>').text(location.zone));
+                            row.append($('<td>').text(location.rack));
+                            row.append($('<td>').text(location.shelf));
+                            tableBody.append(row);
+                        });
+                    } else {
+                        // Show message if no locations found
+                        tableBody.append(
+                            '<tr><td colspan="4" class="text-center">No locations found</td></tr>'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Error loading locations:", error);
+                    $('#locationsTableBody').html(
+                        '<tr><td colspan="4" class="text-center text-danger">Error loading locations</td></tr>'
+                    );
+                }
+            });
+        });
+    });
+    </script>
 </body>
 </html>

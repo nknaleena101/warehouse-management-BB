@@ -36,26 +36,25 @@ public class LocationDao {
 
     public static List<Location> getAllLocations() {
         List<Location> locations = new ArrayList<>();
+        String sql = "SELECT * FROM locations";
 
-        String sql = "select * from locations";
-        try(Connection conn = DatabaseUtil.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.executeQuery(sql);
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
 
-            ResultSet rs = stmt.getResultSet();
             while (rs.next()) {
                 Location location = new Location();
                 location.setLocationId(rs.getInt("location_id"));
-                location.setRack(rs.getString("rack"));
                 location.setZone(rs.getString("zone"));
+                location.setRack(rs.getString("rack"));
                 location.setShelf(rs.getString("shelf"));
                 locations.add(location);
             }
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.err.println("SQL Error in getAllLocations: " + e.getMessage());
+            e.printStackTrace();
         }
-
-        return  locations;
+        return locations;
     }
 
     public static boolean createLocation(Location location) {
@@ -82,6 +81,13 @@ public class LocationDao {
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+    public static String testConnection() {
+        try (Connection conn = DatabaseUtil.getConnection()) {
+            return "Connection successful to: " + conn.getMetaData().getURL();
+        } catch (SQLException e) {
+            return "Connection failed: " + e.getMessage();
         }
     }
 
