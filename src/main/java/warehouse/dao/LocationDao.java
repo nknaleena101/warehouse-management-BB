@@ -3,10 +3,7 @@ package warehouse.dao;
 import warehouse.model.Location;
 import warehouse.util.DatabaseUtil;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -60,19 +57,32 @@ public class LocationDao {
 
         return  locations;
     }
-//
-//    private Location mapLocation(ResultSet rs) throws SQLException {
-//        Location location = new Location();
-//        location.setLocationId(rs.getInt("location_id"));
-//        location.setLocationCode(rs.getString("location_code"));
-//        location.setZone(rs.getString("zone"));
-//        location.setAisle(rs.getString("aisle"));
-//        location.setRack(rs.getString("rack"));
-//        location.setShelf(rs.getString("shelf"));
-//        location.setCapacity(rs.getInt("capacity"));
-//        location.setCurrentQuantity(rs.getInt("current_quantity"));
-//        location.setStatus(rs.getString("status"));
-//        return location;
-//    }
+
+    public static boolean createLocation(Location location) {
+        String sql = "INSERT INTO locations (location_id, zone, rack, shelf) VALUES (NULL, ?, ?, ?)";
+
+        try (Connection conn = DatabaseUtil.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            ps.setString(1, location.getZone());
+            ps.setString(2, location.getRack());
+            ps.setString(3, location.getShelf());
+
+            int rowsAffected = ps.executeUpdate();
+
+            if (rowsAffected > 0) {
+                try (ResultSet generatedKeys = ps.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        location.setLocationId(generatedKeys.getInt(1));
+                    }
+                }
+                return true;
+            }
+            return false;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 
 }
