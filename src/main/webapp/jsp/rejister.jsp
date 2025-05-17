@@ -217,20 +217,7 @@
             text-decoration: underline;
         }
 
-        /* Password strength indicator */
-        .password-strength {
-            height: 5px;
-            margin-top: 8px;
-            border-radius: 3px;
-            background-color: #edf2f7;
-            overflow: hidden;
-        }
-
-        .password-strength-meter {
-            height: 100%;
-            width: 0;
-            transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
-        }
+        /* Password strength indicator - removed since password field is removed */
 
         /* Responsive adjustments */
         @media screen and (max-width: 900px) {
@@ -284,8 +271,8 @@
             <ul class="benefits-list">
                 <li><i class="fas fa-check-circle"></i> Exclusive deals and discounts</li>
                 <li><i class="fas fa-check-circle"></i> Early access to new collections</li>
-                <li><i class="fas fa-check-circle"></i> Personalized style recommendations</li>
-                <li><i class="fas fa-check-circle"></i> Fast checkout for registered users</li>
+                <li><i class="fas fa-check-circle"></i> Quick and easy checkout</li>
+                <li><i class="fas fa-check-circle"></i> Stay updated with latest trends</li>
             </ul>
         </div>
 
@@ -304,58 +291,15 @@
                     </div>
                 </div>
 
-                <div class="form-row">
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-envelope"></i>
-                            <input type="email" id="email" name="email" class="form-control" placeholder="your@email.com" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="phone">Phone Number</label>
-                        <div class="input-wrapper">
-                            <i class="fas fa-phone"></i>
-                            <input type="tel" id="phone" name="phone" class="form-control" pattern="[0-9]{10}" placeholder="10-digit number" required>
-                        </div>
-                    </div>
-                </div>
-
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="email">Email Address</label>
                     <div class="input-wrapper">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="password" name="password" class="form-control" placeholder="Minimum 6 characters" required minlength="6">
-                    </div>
-                    <div class="password-strength">
-                        <div class="password-strength-meter"></div>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="gender">Gender</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-venus-mars"></i>
-                        <select id="gender" name="gender" class="form-control" required>
-                            <option value="">-- Select Gender --</option>
-                            <option value="Male">Male</option>
-                            <option value="Female">Female</option>
-                            <option value="Other">Other</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="address">Address</label>
-                    <div class="input-wrapper">
-                        <i class="fas fa-home"></i>
-                        <textarea id="address" name="address" class="form-control" rows="3" placeholder="Your shipping address" required></textarea>
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="your@email.com" required>
                     </div>
                 </div>
 
                 <button type="submit" class="register-btn">Create Account</button>
-
                 <div class="login-link">
                     Already have an account? <a href="login.jsp">Login here</a>
                 </div>
@@ -364,33 +308,7 @@
     </div>
 
     <script>
-        // Simple password strength indicator
-        const passwordInput = document.getElementById('password');
-        const strengthMeter = document.querySelector('.password-strength-meter');
-
-        passwordInput.addEventListener('input', function() {
-            const val = passwordInput.value;
-            let strength = 0;
-
-            // Calculate strength
-            if (val.length >= 6) strength += 20;
-            if (val.length >= 8) strength += 20;
-            if (/[A-Z]/.test(val)) strength += 20;
-            if (/[0-9]/.test(val)) strength += 20;
-            if (/[^A-Za-z0-9]/.test(val)) strength += 20;
-
-            // Update the strength meter
-            strengthMeter.style.width = strength + '%';
-
-            // Change color based on strength
-            if (strength <= 40) {
-                strengthMeter.style.backgroundColor = '#f56565'; // weak
-            } else if (strength <= 80) {
-                strengthMeter.style.backgroundColor = '#ecc94b'; // medium
-            } else {
-                strengthMeter.style.backgroundColor = '#48bb78'; // strong
-            }
-        });
+        // No longer needed since password field is removed
     </script>
 </body>
 </html>
