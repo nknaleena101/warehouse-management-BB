@@ -163,24 +163,6 @@
             background-color: white;
         }
 
-        .forgot-password {
-            text-align: right;
-            margin-top: -15px;
-            margin-bottom: 25px;
-        }
-
-        .forgot-password a {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-size: 0.9rem;
-            transition: color 0.2s ease;
-        }
-
-        .forgot-password a:hover {
-            color: var(--primary-hover);
-            text-decoration: underline;
-        }
-
         .login-btn {
             width: 100%;
             padding: 15px;
@@ -221,76 +203,6 @@
             text-decoration: underline;
         }
 
-        .social-login {
-            margin-top: 25px;
-            text-align: center;
-        }
-
-        .social-login p {
-            font-size: 0.9rem;
-            color: #718096;
-            margin-bottom: 15px;
-            position: relative;
-        }
-
-        .social-login p::before,
-        .social-login p::after {
-            content: "";
-            position: absolute;
-            height: 1px;
-            background-color: #e2e8f0;
-            top: 50%;
-            width: 30%;
-        }
-
-        .social-login p::before {
-            left: 0;
-        }
-
-        .social-login p::after {
-            right: 0;
-        }
-
-        .social-buttons {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-        }
-
-        .social-button {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #f7fafc;
-            border: 1px solid #e2e8f0;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .social-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.05);
-        }
-
-        .social-button i {
-            font-size: 18px;
-        }
-
-        .social-button.facebook i {
-            color: #4267B2;
-        }
-
-        .social-button.google i {
-            color: #DB4437;
-        }
-
-        .social-button.apple i {
-            color: #000000;
-        }
-
         /* Responsive adjustments */
         @media screen and (max-width: 900px) {
             .login-container {
@@ -321,10 +233,6 @@
 
             .login-form-header h2 {
                 font-size: 1.6rem;
-            }
-
-            .social-buttons {
-                gap: 10px;
             }
 
             .social-button {
@@ -383,29 +291,10 @@
                     </div>
                 </div>
 
-                <div class="forgot-password">
-                    <a href="forgot-password.jsp">Forgot Password?</a>
-                </div>
-
                 <button type="submit" class="login-btn">Sign In</button>
 
                 <div class="register-link">
                     Don't have an account? <a href="register.jsp">Register now</a>
-                </div>
-
-                <div class="social-login">
-                    <p>Or continue with</p>
-                    <div class="social-buttons">
-                        <div class="social-button facebook">
-                            <i class="fab fa-facebook-f"></i>
-                        </div>
-                        <div class="social-button google">
-                            <i class="fab fa-google"></i>
-                        </div>
-                        <div class="social-button apple">
-                            <i class="fab fa-apple"></i>
-                        </div>
-                    </div>
                 </div>
             </form>
         </div>

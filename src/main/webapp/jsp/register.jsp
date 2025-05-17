@@ -76,26 +76,6 @@
             margin-bottom: 20px;
         }
 
-        .benefits-list {
-            list-style-type: none;
-            text-align: left;
-            width: 100%;
-            margin-top: 30px;
-        }
-
-        .benefits-list li {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-            font-size: 0.95rem;
-        }
-
-        .benefits-list li i {
-            margin-right: 10px;
-            font-size: 18px;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
         .register-form-container {
             width: 60%;
             padding: 40px 50px;
@@ -217,8 +197,6 @@
             text-decoration: underline;
         }
 
-        /* Password strength indicator - removed since password field is removed */
-
         /* Responsive adjustments */
         @media screen and (max-width: 900px) {
             .register-container {
@@ -234,10 +212,6 @@
             .register-form-container {
                 width: 100%;
                 padding: 30px 25px;
-            }
-
-            .benefits-list {
-                display: none;
             }
         }
 
@@ -267,13 +241,6 @@
             <i class="fas fa-tshirt store-icon"></i>
             <h1>Style Haven</h1>
             <p>Join our fashion community and enjoy a seamless shopping experience.</p>
-
-            <ul class="benefits-list">
-                <li><i class="fas fa-check-circle"></i> Exclusive deals and discounts</li>
-                <li><i class="fas fa-check-circle"></i> Early access to new collections</li>
-                <li><i class="fas fa-check-circle"></i> Quick and easy checkout</li>
-                <li><i class="fas fa-check-circle"></i> Stay updated with latest trends</li>
-            </ul>
         </div>
 
         <div class="register-form-container">
