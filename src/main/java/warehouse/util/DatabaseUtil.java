@@ -81,7 +81,7 @@ public class DatabaseUtil {
 //            e.printStackTrace();
 //        }
 //    }
-//
+
     public static void closeConnection(Connection connection) {
         if (connection != null) {
             try {
