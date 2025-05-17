@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DatabaseUtil {
-    private static final String URL = "jdbc:mysql://localhost:3406/swift_link_wms";
+    private static final String URL = "jdbc:mysql://localhost:3406/wms";
     private static final String USER = "root";
     private static final String PASSWORD = "root";
 

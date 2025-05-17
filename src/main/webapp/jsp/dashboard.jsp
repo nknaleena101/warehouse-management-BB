@@ -190,48 +190,6 @@
                                             </div>
                                         </a>
                                     </div>
-
-                                    <!-- Add Inventory -->
-                                    <div class="col-md-6 col-lg-3">
-                                        <a href="${pageContext.request.contextPath}/inventory/add" class="text-decoration-none">
-                                            <div class="card border-0 shadow-sm hover-shadow transition-all">
-                                                <div class="card-body d-flex align-items-center p-2">
-                                                    <div class="rounded-pill bg-success bg-opacity-10 px-2 py-1 me-2">
-                                                        <i class="bi bi-box-seam text-success"></i>
-                                                    </div>
-                                                    <span class="fw-medium">Add Inventory</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-
-                                    <!-- New Order -->
-                                    <div class="col-md-6 col-lg-3">
-                                        <a href="${pageContext.request.contextPath}/orders/new" class="text-decoration-none">
-                                            <div class="card border-0 shadow-sm hover-shadow transition-all">
-                                                <div class="card-body d-flex align-items-center p-2">
-                                                    <div class="rounded-pill bg-info bg-opacity-10 px-2 py-1 me-2">
-                                                        <i class="bi bi-cart-plus text-info"></i>
-                                                    </div>
-                                                    <span class="fw-medium">New Order</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
-
-                                    <!-- Process Shipping -->
-                                    <div class="col-md-6 col-lg-3">
-                                        <a href="${pageContext.request.contextPath}/shipping" class="text-decoration-none">
-                                            <div class="card border-0 shadow-sm hover-shadow transition-all">
-                                                <div class="card-body d-flex align-items-center p-2">
-                                                    <div class="rounded-pill bg-warning bg-opacity-10 px-2 py-1 me-2">
-                                                        <i class="bi bi-truck text-warning"></i>
-                                                    </div>
-                                                    <span class="fw-medium">Process Shipping</span>
-                                                </div>
-                                            </div>
-                                        </a>
-                                    </div>
                                 </div>
                             </div>
                         </div>

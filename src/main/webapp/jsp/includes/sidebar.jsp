@@ -32,21 +32,17 @@
                 </a>
             </li>
             <li class="nav-item mb-2">
-                <a href="${pageContext.request.contextPath}/orders" class="nav-link text-dark d-flex align-items-center gap-2 px-3 py-2">
-                    <i class="bi bi-cart-check"></i>
+                <a href="${pageContext.request.contextPath}/orders"
+                   class="nav-link ${currentPage.endsWith('/orders') ? 'active bg-warning-subtle' : ''} d-flex align-items-center gap-2 px-3 py-2">
+                    <i class="bi bi-box-seam"></i>
                     <span>Orders</span>
                 </a>
             </li>
             <li class="nav-item mb-2">
-                <a href="${pageContext.request.contextPath}/shipping" class="nav-link text-dark d-flex align-items-center gap-2 px-3 py-2">
-                    <i class="bi bi-truck"></i>
+                <a href="${pageContext.request.contextPath}/shipping"
+                   class="nav-link ${currentPage.endsWith('/shipping') ? 'active bg-warning-subtle' : ''} d-flex align-items-center gap-2 px-3 py-2">
+                    <i class="bi bi-box-seam"></i>
                     <span>Shipping</span>
-                </a>
-            </li>
-            <li class="nav-item mb-2">
-                <a href="${pageContext.request.contextPath}/reports" class="nav-link text-dark d-flex align-items-center gap-2 px-3 py-2">
-                    <i class="bi bi-bar-chart-line"></i>
-                    <span>Reports</span>
                 </a>
             </li>
         </ul>

@@ -10,7 +10,7 @@ import java.util.List;
 public class ProductDao {
     public List<Product> getAllProducts() throws SQLException {
         List<Product> products = new ArrayList<>();
-        String sql = "SELECT id, sku, name, description FROM products";
+        String sql = "SELECT id, sku, name FROM products";
 
         try (Connection conn = DatabaseUtil.getConnection();
              Statement stmt = conn.createStatement();
@@ -21,7 +21,6 @@ public class ProductDao {
                 product.setId(rs.getInt("id"));
                 product.setSku(rs.getString("sku"));
                 product.setName(rs.getString("name"));
-                product.setDescription(rs.getString("description"));
                 products.add(product);
             }
         }

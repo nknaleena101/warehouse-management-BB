@@ -1,6 +1,10 @@
 package warehouse.controller;
 
+import warehouse.dao.ASNProducts;
+import warehouse.dao.LocationDao;
 import warehouse.model.ASN;
+import warehouse.model.ASNItem;
+import warehouse.model.Location;
 import warehouse.service.ASNService;
 import warehouse.service.InboundService;
 
@@ -32,12 +36,21 @@ public class InboundServlet extends HttpServlet {
             // Get pending ASNs (status = 'Expected')
             List<ASN> pendingASNs = asnService.getASNsByStatus("Expected");
             request.setAttribute("pendingASNs", pendingASNs);
+            System.out.println("ASNs :" + pendingASNs);
 
             // Get all products for ASN creation
-            request.setAttribute("products", asnService.getAllProducts());
+            List<ASNItem> Products = ASNProducts.getAllProducts();
+            request.setAttribute("productList", Products);
+            System.out.println("Products" + Products);
 
+
+//            Get all locations
+            List<Location> locations = LocationDao.getAllLocations();
+
+            request.setAttribute("locations", locations);
             request.getRequestDispatcher("/jsp/inbound.jsp").forward(request, response);
         } catch (Exception e) {
+            e.printStackTrace();
             request.setAttribute("error", "Error loading inbound page: " + e.getMessage());
             request.getRequestDispatcher("/jsp/inbound.jsp").forward(request, response);
         }
@@ -110,6 +123,7 @@ public class InboundServlet extends HttpServlet {
         int asnId = Integer.parseInt(extractValue(json, "asnId"));
         String location = extractValue(json, "location");
 
+        System.out.println(location);
         inboundService.completePutaway(asnId, location);
         response.setStatus(HttpServletResponse.SC_OK);
     }

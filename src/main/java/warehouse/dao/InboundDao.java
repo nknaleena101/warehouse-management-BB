@@ -38,18 +38,18 @@ public class InboundDao {
         }
     }
 
-    public void recordPutaway(int productId, int quantity, int locationId) throws SQLException {
+    public void recordPutaway(int productId, int quantity, String location) throws SQLException {
         // Check if product already exists in location
-        String checkSql = "SELECT quantity FROM product_location WHERE product_id = ? AND location_id = ?";
-        String updateSql = "UPDATE product_location SET quantity = quantity + ? WHERE product_id = ? AND location_id = ?";
-        String insertSql = "INSERT INTO product_location (product_id, location_id, quantity) VALUES (?, ?, ?)";
+        String checkSql = "Select quantity from product_location where product_id = ? and location = ?";
+        String updateSql = "UPDATE product_location SET quantity = quantity + ? WHERE product_id = ? AND location = ?";
+        String insertSql = "INSERT INTO product_location (product_id, location, quantity) VALUES (?, ?, ?)";
 
         try (Connection conn = DatabaseUtil.getConnection()) {
             // Check existing quantity
             int existingQuantity = 0;
             try (PreparedStatement checkStmt = conn.prepareStatement(checkSql)) {
                 checkStmt.setInt(1, productId);
-                checkStmt.setInt(2, locationId);
+                checkStmt.setString(2, location);
                 java.sql.ResultSet rs = checkStmt.executeQuery();
                 if (rs.next()) {
                     existingQuantity = rs.getInt(1);
@@ -61,36 +61,18 @@ public class InboundDao {
                 try (PreparedStatement updateStmt = conn.prepareStatement(updateSql)) {
                     updateStmt.setInt(1, quantity);
                     updateStmt.setInt(2, productId);
-                    updateStmt.setInt(3, locationId);
+                    updateStmt.setString(3, location);
                     updateStmt.executeUpdate();
                 }
             } else {
                 try (PreparedStatement insertStmt = conn.prepareStatement(insertSql)) {
                     insertStmt.setInt(1, productId);
-                    insertStmt.setInt(2, locationId);
+                    insertStmt.setString(2, location);
                     insertStmt.setInt(3, quantity);
                     insertStmt.executeUpdate();
                 }
             }
-
-            // Update location status
-            updateLocationStatus(conn, locationId);
         }
     }
 
-    private void updateLocationStatus(Connection conn, int locationId) throws SQLException {
-        String sql = "UPDATE locations SET current_quantity = " +
-                "(SELECT SUM(quantity) FROM product_location WHERE location_id = ?), " +
-                "status = CASE " +
-                "WHEN current_quantity >= capacity THEN 'Full' " +
-                "WHEN current_quantity > 0 THEN 'Available' " +
-                "ELSE 'Empty' END " +
-                "WHERE location_id = ?";
-
-        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, locationId);
-            stmt.setInt(2, locationId);
-            stmt.executeUpdate();
-        }
-    }
 }

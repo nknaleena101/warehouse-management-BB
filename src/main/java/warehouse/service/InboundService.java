@@ -42,26 +42,20 @@ public class InboundService {
         inboundDao.recordInspection(asnId, inspectorName, notes, passed);
     }
 
-    public void completePutaway(int asnId, String locationCode) throws SQLException {
+    public void completePutaway(int asnId, String location) throws SQLException {
         // Get ASN items
         List<ASNItem> items = asnDao.getItemsForASN(asnId);
 
-        // Get location
-        Location location = locationDao.getLocationByCode(locationCode);
-        if (location == null) {
-            throw new SQLException("Location not found: " + locationCode);
-        }
-
         // Update inventory for each item
         for (ASNItem item : items) {
-            inboundDao.recordPutaway(item.getProductId(), item.getQuantity(), location.getLocationId());
+            inboundDao.recordPutaway(item.getProductId(), item.getQuantity(), location);
         }
 
         // Update ASN status to "Putaway Complete"
         asnDao.updateASNStatus(asnId, "Putaway Complete");
     }
 
-    public List<Location> getAvailableLocations() throws SQLException {
-        return locationDao.getAvailableLocations();
-    }
+//    public List<Location> getAvailableLocations() throws SQLException {
+//        return locationDao.getAvailableLocations();
+//    }
 }
