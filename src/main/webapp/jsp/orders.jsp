@@ -402,9 +402,16 @@
             // Handle picking status change
             document.querySelectorAll('.picking-status').forEach(select => {
                 select.addEventListener('change', function() {
-                    const orderId = this.getAttribute('data-order-id');
+
+                    // Get the numeric order ID (remove "ORD-" prefix if present)
+                    let orderId = this.getAttribute('data-order-id');
+                    orderId = orderId.replace('ORD-', '');
+
+                    // const orderId = this.getAttribute('data-order-id');
                     const status = this.value;
                     const originalValue = this.getAttribute('data-original-value');
+
+                    console.log("Sending request with orderId:", orderId, "status:", status);
 
                     // Show loading indicator
                     this.disabled = true;
