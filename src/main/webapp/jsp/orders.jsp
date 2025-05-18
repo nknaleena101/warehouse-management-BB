@@ -278,5 +278,295 @@
         </div>
     </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add item row functionality
+        document.getElementById('addItemBtn').addEventListener('click', function () {
+            const tbody = document.querySelector('#orderItemsTable tbody');
+            const newRow = document.createElement('tr');
+
+            // Clone the first row's product select options
+            const firstProductSelect = document.querySelector('#orderItemsTable .product-select');
+            const options = Array.from(firstProductSelect.options)
+                .filter(opt => opt.value !== '')
+                .map(opt => `<option value="${opt.value}">${opt.text}</option>`)
+                .join('');
+
+            newRow.innerHTML = `
+        <td>
+            <select class="form-select product-select" name="productId" required>
+                <option value="">Select Product</option>
+                ${options}
+            </select>
+        </td>
+        <td>
+            <input type="number" class="form-control quantity-input" name="quantity" min="1" value="1" required>
+        </td>
+        <td>
+            <button type="button" class="btn btn-sm btn-danger remove-item-btn">
+                <i class="bi bi-trash"></i>
+            </button>
+        </td>
+    `;
+
+            tbody.appendChild(newRow);
+
+            // Add event listener to the new delete button
+            newRow.querySelector('.remove-item-btn').addEventListener('click', function () {
+                if (tbody.children.length > 1) {
+                    tbody.removeChild(newRow);
+                }
+            });
+        });
+
+        // Order items modal functionality
+        const orderItemsModal = document.getElementById('orderItemsModal');
+        if (orderItemsModal) {
+            orderItemsModal.addEventListener('show.bs.modal', function (event) {
+                const button = event.relatedTarget;
+                const orderId = button.getAttribute('data-order-id');
+                const modalTitle = orderItemsModal.querySelector('.modal-title');
+                modalTitle.textContent = `Order Items - ${orderId}`;
+
+                // Clear previous items
+                const itemsBody = document.getElementById('orderItemsBody');
+                itemsBody.innerHTML = '<tr><td colspan="3" class="text-center">Loading items...</td></tr>';
+
+                // Extract numeric order ID
+                const numericOrderId = orderId.replace('ORD-', '');
+
+                // Fetch order items via AJAX
+                fetch(`${pageContext.request.contextPath}/orders?orderId=${numericOrderId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(items => {
+                        if (items.error) {
+                            itemsBody.innerHTML = `<tr><td colspan="3" class="text-center text-danger">${items.error}</td></tr>`;
+                            return;
+                        }
+
+                        if (items.length === 0) {
+                            itemsBody.innerHTML = '<tr><td colspan="3" class="text-center">No items found for this order</td></tr>';
+                            return;
+                        }
+
+                        // Build the items table
+                        let html = '';
+                        items.forEach(item => {
+                            let statusBadge = '';
+                            if (item.status === 'Picked') {
+                                statusBadge = '<span class="badge bg-success">Picked</span>';
+                            } else if (item.status === 'Packed') {
+                                statusBadge = '<span class="badge bg-info">Packed</span>';
+                            } else {
+                                statusBadge = '<span class="badge bg-warning text-dark">Pending</span>';
+                            }
+
+                            html += `
+                                <tr>
+                                    <td>PROD-${item.productId}</td>
+                                    <td>${item.quantity}</td>
+                                    <td>${statusBadge}</td>
+                                </tr>
+                            `;
+                        });
+
+                        itemsBody.innerHTML = html;
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        itemsBody.innerHTML = `<tr><td colspan="3" class="text-center text-danger">Error loading items: ${error.message}</td></tr>`;
+                    });
+            });
+        }
+
+        // Add delete functionality to the first rows delete button
+        const firstDeleteBtn = document.querySelector('#orderItemsTable .remove-item-btn');
+        if (firstDeleteBtn) {
+            firstDeleteBtn.addEventListener('click', function () {
+                const tbody = document.querySelector('#orderItemsTable tbody');
+                if (tbody.children.length > 1) {
+                    tbody.removeChild(this.closest('tr'));
+                }
+            });
+        }
+
+        // Set todays date as default for order date
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('orderDate').value = today;
+    });
+</script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Handle picking status change
+        document.querySelectorAll('.picking-status').forEach(select => {
+            select.addEventListener('change', function () {
+
+                // Get the numeric order ID (remove "ORD-" prefix if present)
+                let orderId = this.getAttribute('data-order-id');
+                orderId = orderId.replace('ORD-', '');
+
+                // const orderId = this.getAttribute('data-order-id');
+                const status = this.value;
+                const originalValue = this.getAttribute('data-original-value');
+
+                // Show loading indicator
+                this.disabled = true;
+                const spinner = document.createElement('span');
+                spinner.className = 'spinner-border spinner-border-sm ms-2';
+                this.parentNode.appendChild(spinner);
+
+                fetch(`${pageContext.request.contextPath}/orders/picking`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: new URLSearchParams({ orderId, status }).toString()
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        // Remove loading indicator
+                        this.disabled = false;
+                        spinner.remove();
+
+                        if (data.success) {
+                            const passedOrderId = String(orderId).replace(/\D+/g, '');
+                            const selector = '.complete-packing-btn[data-order-id="' + passedOrderId + '"]';
+                            // Update UI
+                            const packingBtn = document.querySelector(selector);
+                            packingBtn.disabled = status !== 'Completed';
+
+                            if (packingBtn) {
+                                console.log(status);
+                                packingBtn.disabled = status !== 'In Progress';
+                                if (status === 'In Progress') {
+                                    packingBtn.classList.add('btn-success');
+                                }
+                            }
+                            // Update original value marker
+                            this.setAttribute('data-original-value', status);
+
+                            // Show success toast
+                            showToast('Status updated', 'Picking status was updated successfully', 'success');
+                        } else {
+                            // Revert to original value
+                            this.value = originalValue;
+                            showToast('Update failed', data.message || 'Failed to update picking status', 'danger');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        this.disabled = false;
+                        spinner.remove();
+
+                        // Revert to original value
+                        this.value = originalValue;
+                        showToast('Error', 'Failed to update picking status: ' + error.message, 'danger');
+                    });
+            });
+
+            // Set initial original value
+            select.setAttribute('data-original-value', select.value);
+        });
+
+        // Add this helper function for showing toasts
+        function showToast(title, message, type) {
+            const toastContainer = document.getElementById('toastContainer') || createToastContainer();
+            const toastId = 'toast-' + Date.now();
+
+            const toast = document.createElement('div');
+            toast.className = `toast align-items-center text-white bg-${type} border-0`;
+            toast.setAttribute('role', 'alert');
+            toast.setAttribute('aria-live', 'assertive');
+            toast.setAttribute('aria-atomic', 'true');
+            toast.id = toastId;
+
+            toast.innerHTML = `
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <strong>${title}</strong><br>${message}
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                `;
+
+            toastContainer.appendChild(toast);
+            new bootstrap.Toast(toast).show();
+
+            // Auto-remove after hide
+            toast.addEventListener('hidden.bs.toast', function () {
+                toast.remove();
+            });
+        }
+
+        function createToastContainer() {
+            const container = document.createElement('div');
+            container.id = 'toastContainer';
+            container.style.position = 'fixed';
+            container.style.top = '20px';
+            container.style.right = '20px';
+            container.style.zIndex = '1100';
+            document.body.appendChild(container);
+            return container;
+        }
+
+        // Handle complete packing button
+        document.querySelectorAll('.complete-packing-btn').forEach(button => {
+            button.addEventListener('click', function () {
+                const orderId = this.getAttribute('data-order-id');
+                const status = "Completed";
+
+                if (confirm('Are you sure you want to mark this order as packed?')) {
+                    fetch(`${pageContext.request.contextPath}/orders/picking`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: new URLSearchParams({ orderId, status }).toString()
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Failed to complete packing');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            if (data.success) {
+                                // Update the order status in the UI
+                                const row = document.querySelector('tr[data-order-id="' + orderId + '"]');
+                                if (row) {
+                                    // You might want to refresh the row or indicate packing is complete
+                                    alert('Order marked as packed successfully');
+                                    location.reload(); // Refresh the page to show updated status
+                                }
+                            } else {
+                                alert('Failed to complete packing: ' + (data.message || 'Unknown error'));
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Error:', error);
+                            alert('Error completing packing: ' + error.message);
+                        });
+                }
+            });
+        });
+    });
+</script>
 </body>
 </html>
