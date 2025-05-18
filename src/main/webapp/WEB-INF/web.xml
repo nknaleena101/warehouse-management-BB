@@ -1,7 +1,24 @@
-<!DOCTYPE web-app PUBLIC
- "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
- "http://java.sun.com/dtd/web-app_2_3.dtd" >
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee"
+         version="4.0">
 
-<web-app>
-  <display-name>Archetype Created Web Application</display-name>
+  <welcome-file-list>
+    <welcome-file>jsp/dashboard.jsp</welcome-file>
+  </welcome-file-list>
+
+  <session-config>
+    <session-timeout>30</session-timeout>
+  </session-config>
+
+  <!-- This enables EL expressions -->
+  <jsp-config>
+    <jsp-property-group>
+      <url-pattern>*.jsp</url-pattern>
+      <el-ignored>false</el-ignored>
+    </jsp-property-group>
+  </jsp-config>
+
+
 </web-app>
