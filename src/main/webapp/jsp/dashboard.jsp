@@ -116,56 +116,56 @@
         <h2 class="mb-4">Dashboard</h2>
 
         <!-- Stats Overview Cards -->
-                <div class="row g-4 mb-4">
-                    <div class="col-xl-3 col-md-6">
-                        <div class="stat-card bg-products">
-                            <div class="stat-card-header">
-                                <h5 class="stat-card-label">Total Products</h5>
-                                <i class="bi bi-box stat-card-icon"></i>
-                            </div>
-                            <div class="stat-card-body">
-                                <h2 class="stat-card-value">1,248</h2>
-                                <p class="stat-card-label">12% increase from last month</p>
-                            </div>
-                        </div>
+        <div class="row g-4 mb-4">
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card bg-primary text-white">
+                    <div class="stat-card-header">
+                        <h5>Total Products</h5>
+                        <i class="bi bi-box stat-card-icon"></i>
                     </div>
-                    <div class="col-xl-3 col-md-6">
-                        <div class="stat-card bg-stock">
-                            <div class="stat-card-header">
-                                <h5 class="stat-card-label">In Stock</h5>
-                                <i class="bi bi-archive stat-card-icon"></i>
-                            </div>
-                            <div class="stat-card-body">
-                                <h2 class="stat-card-value">856</h2>
-                                <p class="stat-card-label">68.6% of inventory</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-md-6">
-                        <div class="stat-card bg-orders">
-                            <div class="stat-card-header">
-                                <h5 class="stat-card-label">Pending Orders</h5>
-                                <i class="bi bi-clipboard-check stat-card-icon"></i>
-                            </div>
-                            <div class="stat-card-body">
-                                <h2 class="stat-card-value">24</h2>
-                                <p class="stat-card-label">5 due today</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-xl-3 col-md-6">
-                        <div class="stat-card bg-lowstock">
-                            <div class="stat-card-header">
-                                <h5 class="stat-card-label">Low Stock</h5>
-                                <i class="bi bi-exclamation-triangle stat-card-icon"></i>
-                            </div>
-                            <div class="stat-card-body">
-                                <h2 class="stat-card-value">18</h2>
-                                <p class="stat-card-label">Items need attention</p>
-                            </div>
-                        </div>
+                    <div class="stat-card-body">
+                        <h2 class="stat-card-value">${totalProducts}</h2>
                     </div>
                 </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card bg-primary text-white">
+                    <div class="stat-card-header">
+                        <h5>Pending Orders</h5>
+                        <i class="bi bi-hourglass-split stat-card-icon"></i>
+                    </div>
+                    <div class="stat-card-body">
+                        <h2 class="stat-card-value">${pendingOrders}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card bg-primary text-white">
+                    <div class="stat-card-header">
+                        <h5>Shipped Orders</h5>
+                        <i class="bi bi-truck stat-card-icon"></i>
+                    </div>
+                    <div class="stat-card-body">
+                        <h2 class="stat-card-value">${shippedOrders}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="stat-card bg-primary text-white">
+                    <div class="stat-card-header">
+                        <h5>Expected Orders</h5>
+                        <i class="bi bi-calendar-event stat-card-icon"></i>
+                    </div>
+                    <div class="stat-card-body">
+                        <h2 class="stat-card-value">${expectedOrders}</h2>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+                <%--
                 <!-- Quick Actions - Modern Design -->
                 <div class="row mb-4">
                     <div class="col-12">
@@ -194,14 +194,13 @@
                             </div>
                         </div>
                     </div>
-                </div>
-
+                </div> --%>
 
         <!-- Recent ASNs and Orders - Modern Look -->
         <div class="row g-4">
 
             <!-- Recent ASNs -->
-            <div class="col-lg-6">
+            <div class="col-12">
                 <div class="card shadow-sm h-100 border-0">
                     <div class="card-header bg-white border-bottom">
                         <h5 class="mb-0 fw-semibold text-primary">Recent ASNs (Advanced Shipping Notice)</h5>
@@ -229,7 +228,7 @@
                                                     </td>
                                                     <td>
                                                         <span class="badge px-3 py-2 rounded-pill
-                                                            ${asn.status == 'Received' ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning'}">
+                                                            ${asn.status == 'Received' ? 'bg-success-subtle text-success' : 'bg-success-subtle text-secondary'}">
                                                             ${asn.status}
                                                         </span>
                                                     </td>
@@ -241,51 +240,6 @@
                             </c:when>
                             <c:otherwise>
                                 <div class="alert alert-warning m-3">No recent ASNs found.</div>
-                            </c:otherwise>
-                        </c:choose>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Recent Orders -->
-            <div class="col-lg-6">
-                <div class="card shadow-sm h-100 border-0">
-                    <div class="card-header bg-white border-bottom">
-                        <h5 class="mb-0 fw-semibold text-primary">Recent Orders</h5>
-                    </div>
-                    <div class="card-body p-0">
-                        <c:choose>
-                            <c:when test="${not empty recentOrders}">
-                                <div class="table-responsive">
-                                    <table class="table table-hover align-middle mb-0">
-                                        <thead class="table-light text-nowrap">
-                                            <tr>
-                                                <th>Order ID</th>
-                                                <th>Destination</th>
-                                                <th>Status</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <c:forEach items="${recentOrders}" var="order">
-                                                <tr>
-                                                    <td class="fw-medium">${order.orderId}</td>
-                                                    <td>${order.destination}</td>
-                                                    <td>
-                                                        <span class="badge px-3 py-2 rounded-pill
-                                                            ${order.status == 'Shipped' ? 'bg-success-subtle text-success' :
-                                                              order.status == 'Processing' ? 'bg-warning-subtle text-warning' :
-                                                              'bg-primary-subtle text-primary'}">
-                                                            ${order.status}
-                                                        </span>
-                                                    </td>
-                                                </tr>
-                                            </c:forEach>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </c:when>
-                            <c:otherwise>
-                                <div class="alert alert-info m-3">No recent orders found.</div>
                             </c:otherwise>
                         </c:choose>
                     </div>

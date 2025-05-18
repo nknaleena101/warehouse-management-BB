@@ -65,6 +65,7 @@ public class ASNServlet extends HttpServlet {
                 if (created) {
                     response.setStatus(HttpServletResponse.SC_OK);
                     response.getWriter().write("ASN created successfully");
+                    response.sendRedirect(request.getContextPath() +"/dashboard");
                 } else {
                     response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
                     response.getWriter().write("Failed to create ASN");

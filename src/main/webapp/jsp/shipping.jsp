@@ -24,6 +24,74 @@
         .shipped-card:hover {
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
         }
+
+        /* Color-only changes to match blue sidebar */
+        .btn-primary {
+            background-color: #3B82F6;
+            border-color: #3B82F6;
+        }
+
+        .btn-primary:hover, .btn-primary:focus {
+            background-color: #2563EB;
+            border-color: #2563EB;
+        }
+
+        .table-primary, .table-primary > th, .table-primary > td {
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+
+        .text-primary {
+            color: #3B82F6 !important;
+        }
+
+        .border-primary {
+            border-color: #3B82F6 !important;
+        }
+
+        .bg-primary {
+            background-color: #3B82F6 !important;
+        }
+
+        .form-check-input:checked {
+            background-color: #3B82F6;
+            border-color: #3B82F6;
+        }
+
+        .form-check-input:focus {
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        /* Status badges with blue theme */
+        .status-transit {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #3B82F6;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+        }
+
+        .status-delivered {
+            background-color: rgba(25, 135, 84, 0.1);
+            color: #198754;
+        }
+
+        .status-pending {
+            background-color: rgba(96, 165, 250, 0.1);
+            color: #60A5FA;
+        }
     </style>
 </head>
 <body>
@@ -97,30 +165,32 @@
                             <tr>
                                 <th>Order ID</th>
                                 <th>Destination</th>
-                                <th>Items Shipped</th>
+                                <th>Product ID</th>
+                                <th>Quantity</th>
                                 <th>Carrier</th>
                                 <th>Tracking #</th>
+                                <th>Order Date</th>
                                 <th>Shipped Date</th>
                                 <th>Expected Arrival</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
-
                         <tbody>
-                        <c:forEach var="item" items="${shippingItems}">
-                        <tr>
-                            <td>${item.orderId}</td>
-                            <td>${item.destination}</td>
-                            <td>${item.itemsShipped}</td>
-                            <td>${item.carrier}</td>
-                            <td>${item.tracking}</td>
-                            <td>${item.shippedDate}</td>
-                            <td>${item.expectedArrival}</td>
-                            <td>${item.status}</td>
-                        </tr>
-                        </c:forEach>
+                            <c:forEach var="item" items="${shippingItems}">
+                                <tr>
+                                    <td>${item.orderId}</td>
+                                    <td>${item.destination}</td>
+                                    <td>${item.productId}</td>
+                                    <td>${item.quantity}</td>
+                                    <td>${item.carrier}</td>
+                                    <td>${item.trackingNumber}</td>
+                                    <td><fmt:formatDate value="${item.orderDate}" pattern="yyyy-MM-dd"/></td>
+                                    <td><fmt:formatDate value="${item.shippedAt}" pattern="yyyy-MM-dd HH:mm"/></td>
+                                    <td><fmt:formatDate value="${item.expectedArrival}" pattern="yyyy-MM-dd"/></td>
+                                    <td>${item.status}</td>
+                                </tr>
+                            </c:forEach>
                         </tbody>
-
                     </table>
                 </div>
             </div>
