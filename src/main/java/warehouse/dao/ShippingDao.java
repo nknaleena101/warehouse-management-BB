@@ -11,10 +11,9 @@ public class ShippingDao {
     // Get all packed orders for dropdown
     public List<ShippingItem> getPackedOrders() throws SQLException {
         List<ShippingItem> orders = new ArrayList<>();
-        String sql = "SELECT DISTINCT d.order_id, d.destination " +
-                "FROM delivery_orders d " +
-                "JOIN order_items o ON d.order_id = o.order_id " +
-                "WHERE o.status = 'Packed' AND d.status != 'Shipped'";
+        String sql = "SELECT order_id, destination " +
+                "FROM delivery_orders " +
+                "WHERE status = 'Packed'";
 
         System.out.println("Executing SQL: " + sql);
 
@@ -36,7 +35,6 @@ public class ShippingDao {
                         ", Destination=" + item.getDestination());
             }
 
-            System.out.println("Total packed orders found: " + count);
         }
         return orders;
     }
