@@ -190,7 +190,7 @@ public class OrderDao {
 
     public boolean updateOrderStatus(int orderId, String status) throws SQLException {
         String sql = "UPDATE delivery_orders SET status = ? WHERE order_id = ?";
-
+        System.out.println("SU" + status +" "+ orderId);
         try (Connection conn = DatabaseUtil.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
@@ -199,6 +199,9 @@ public class OrderDao {
 
             int affectedRows = stmt.executeUpdate();
             return affectedRows > 0;
+        } catch (Exception e){
+            e.printStackTrace();
         }
+        return false;
     }
 }

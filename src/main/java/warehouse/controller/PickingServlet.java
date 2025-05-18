@@ -14,8 +14,7 @@ import java.sql.SQLException;
 public class PickingServlet extends HttpServlet {
     private OrderService orderService = new OrderService();
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             // Get and validate orderId
             String orderIdStr = request.getParameter("orderId");
@@ -27,11 +26,8 @@ public class PickingServlet extends HttpServlet {
             orderIdStr = orderIdStr.replaceAll("[^0-9]", "");
 
             int orderId = Integer.parseInt(orderIdStr);
-
 //            int orderId = Integer.parseInt(request.getParameter("orderId"));
             String status = request.getParameter("status");
-
-            System.out.println("Received update request for order: " + orderId + ", status: " + status);
 
             // Convert UI status to database statuses
             String orderStatus;
@@ -51,26 +47,16 @@ public class PickingServlet extends HttpServlet {
                     itemStatus = "Requested";
             }
 
-            System.out.println("Received orderId: " + orderIdStr);
-            System.out.println("Received status: " + request.getParameter("status"));
-
-            System.out.println("Updating order status to: " + orderStatus);
-            System.out.println("Updating items status to: " + itemStatus);
-
             // First update the items status
+            System.out.println( orderId + orderStatus);
             boolean itemsUpdated = orderService.updateOrderItemsStatus(orderId, itemStatus);
 
             // Then update the main order status
             boolean orderUpdated = orderService.updateOrderStatus(orderId, orderStatus);
-
             boolean success = itemsUpdated && orderUpdated;
 
             response.setContentType("application/json");
-            response.getWriter().write(String.format(
-                    "{\"success\":%b, \"message\":\"%s\"}",
-                    success,
-                    success ? "Status updated successfully" : "Failed to update status"
-            ));
+            response.getWriter().write(String.format("{\"success\":%b, \"message\":\"%s\"}", success, success ? "Status updated successfully" : "Failed to update status"));
         } catch (NumberFormatException e) {
             System.err.println("Invalid order ID format");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
