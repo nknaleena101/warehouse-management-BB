@@ -1,19 +1,19 @@
 package warehouse.controller;
 
+import warehouse.dao.ShippingItemDao;
+import warehouse.model.ShippingItem;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.*;
+import java.sql.SQLException;
 import java.util.List;
-import warehouse.model.ShippingItem;
-import warehouse.dao.ShippingItemDao;
 
 @WebServlet("/shipping")
 public class ShippingServlet extends HttpServlet {
-
     private ShippingItemDao shippingItemDao;
 
     @Override
@@ -24,16 +24,12 @@ public class ShippingServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-
-
-        List<ShippingItem> shippingItems;
         try {
-            shippingItems = shippingItemDao.getAllShippingItems();
+            List<ShippingItem> shippingItems = shippingItemDao.getAllShippingItems();
+            request.setAttribute("shippingItems", shippingItems);
+            request.getRequestDispatcher("/jsp/shipping.jsp").forward(request, response);
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            throw new ServletException("Error retrieving shipping data", e);
         }
-
-        request.setAttribute("shippingItems", shippingItems);
-        request.getRequestDispatcher("/jsp/shipping.jsp").forward(request, response);
     }
 }

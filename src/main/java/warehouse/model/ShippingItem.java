@@ -1,26 +1,36 @@
 package warehouse.model;
 
+import java.util.Date;
+
 public class ShippingItem {
-
-    private String orderId;
+    private int orderId;
     private String destination;
-    private String itemsShipped;
+    private Date orderDate;
     private String carrier;
-    private String tracking;
-    private String shippedDate;
-    private String expectedArrival;
+    private String trackingNumber;
+    private Date expectedArrival;
+    private Date shippedAt;
     private String status;
+    private int productId;  // New field
+    private int quantity;
 
-    // Getter and Setter for orderId
-    public String getOrderId() {
+    // Getters and Setters (add the new one)
+    public int getProductId() {
+        return productId;
+    }
+
+    public void setProductId(int productId) {
+        this.productId = productId;
+    }
+
+    public int getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(String orderId) {
+    public void setOrderId(int orderId) {
         this.orderId = orderId;
     }
 
-    // Getter and Setter for destination
     public String getDestination() {
         return destination;
     }
@@ -29,16 +39,14 @@ public class ShippingItem {
         this.destination = destination;
     }
 
-    // Getter and Setter for itemsShipped
-    public String getItemsShipped() {
-        return itemsShipped;
+    public Date getOrderDate() {
+        return orderDate;
     }
 
-    public void setItemsShipped(String itemsShipped) {
-        this.itemsShipped = itemsShipped;
+    public void setOrderDate(Date orderDate) {
+        this.orderDate = orderDate;
     }
 
-    // Getter and Setter for carrier
     public String getCarrier() {
         return carrier;
     }
@@ -47,39 +55,43 @@ public class ShippingItem {
         this.carrier = carrier;
     }
 
-    // Getter and Setter for tracking
-    public String getTracking() {
-        return tracking;
+    public String getTrackingNumber() {
+        return trackingNumber;
     }
 
-    public void setTracking(String tracking) {
-        this.tracking = tracking;
+    public void setTrackingNumber(String trackingNumber) {
+        this.trackingNumber = trackingNumber;
     }
 
-    // Getter and Setter for shippedDate
-    public String getShippedDate() {
-        return shippedDate;
-    }
-
-    public void setShippedDate(String shippedDate) {
-        this.shippedDate = shippedDate;
-    }
-
-    // Getter and Setter for expectedArrival
-    public String getExpectedArrival() {
+    public Date getExpectedArrival() {
         return expectedArrival;
     }
 
-    public void setExpectedArrival(String expectedArrival) {
+    public void setExpectedArrival(Date expectedArrival) {
         this.expectedArrival = expectedArrival;
     }
 
-    // Getter and Setter for status
+    public Date getShippedAt() {
+        return shippedAt;
+    }
+
+    public void setShippedAt(Date shippedAt) {
+        this.shippedAt = shippedAt;
+    }
+
     public String getStatus() {
         return status;
     }
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 }
