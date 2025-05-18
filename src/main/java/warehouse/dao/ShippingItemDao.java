@@ -12,7 +12,7 @@ public class ShippingItemDao {
         List<ShippingItem> items = new ArrayList<>();
         String sql = "SELECT d.order_id, d.destination, d.order_date, " +
                 "s.carrier, s.tracking_number, s.expected_arrival, " +
-                "s.shipped_at, o.status as item_status, " +
+                "s.shipped_at, d.status as item_status, " +
                 "o.product_id, o.quantity " +
                 "FROM delivery_orders d " +
                 "JOIN order_items o ON d.order_id = o.order_id " +
