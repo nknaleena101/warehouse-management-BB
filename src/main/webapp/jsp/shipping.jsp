@@ -105,39 +105,22 @@
                                 <th>Status</th>
                             </tr>
                         </thead>
+
                         <tbody>
-                            <!-- Sample data - replace with JSTL/EL from your backend -->
-                            <tr>
-                                <td>ORD-1001</td>
-                                <td>123 Main St, Anytown</td>
-                                <td>3 items</td>
-                                <td>UPS</td>
-                                <td>1Z12345E0291980793</td>
-                                <td>2023-07-16</td>
-                                <td>2023-07-19</td>
-                                <td><span class="badge bg-primary">Shipped</span></td>
-                            </tr>
-                            <tr>
-                                <td>ORD-1002</td>
-                                <td>456 Oak Ave, Somewhere</td>
-                                <td>2 items</td>
-                                <td>FedEx</td>
-                                <td>612345678901</td>
-                                <td>2023-07-17</td>
-                                <td>2023-07-20</td>
-                                <td><span class="badge bg-primary">Shipped</span></td>
-                            </tr>
-                            <tr>
-                                <td>ORD-1004</td>
-                                <td>321 Elm St, Nowhere</td>
-                                <td>1 item</td>
-                                <td>USPS</td>
-                                <td>9400100000000000000000</td>
-                                <td>2023-07-18</td>
-                                <td>2023-07-22</td>
-                                <td><span class="badge bg-primary">Shipped</span></td>
-                            </tr>
+                        <c:forEach var="item" items="${shippingItems}">
+                        <tr>
+                            <td>${item.orderId}</td>
+                            <td>${item.destination}</td>
+                            <td>${item.itemsShipped}</td>
+                            <td>${item.carrier}</td>
+                            <td>${item.tracking}</td>
+                            <td>${item.shippedDate}</td>
+                            <td>${item.expectedArrival}</td>
+                            <td>${item.status}</td>
+                        </tr>
+                        </c:forEach>
                         </tbody>
+
                     </table>
                 </div>
             </div>
