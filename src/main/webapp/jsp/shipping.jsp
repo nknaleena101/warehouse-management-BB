@@ -165,42 +165,32 @@
                             <tr>
                                 <th>Order ID</th>
                                 <th>Destination</th>
-                                <th>Items Shipped</th>
+                                <th>Product ID</th>
+                                <th>Quantity</th>
                                 <th>Carrier</th>
                                 <th>Tracking #</th>
+                                <th>Order Date</th>
                                 <th>Shipped Date</th>
                                 <th>Expected Arrival</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
-
                         <tbody>
-                        <c:forEach var="item" items="${shippingItems}">
-                        <tr>
-                            <td>${item.orderId}</td>
-                            <td>${item.destination}</td>
-                            <td>${item.itemsShipped}</td>
-                            <td>${item.carrier}</td>
-                            <td>${item.tracking}</td>
-                            <td>${item.shippedDate}</td>
-                            <td>${item.expectedArrival}</td>
-                            <td>
-                                <c:choose>
-                                    <c:when test="${item.status eq 'Delivered'}">
-                                        <span class="status-badge status-delivered">Delivered</span>
-                                    </c:when>
-                                    <c:when test="${item.status eq 'In Transit'}">
-                                        <span class="status-badge status-transit">In Transit</span>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <span class="status-badge status-pending">Pending</span>
-                                    </c:otherwise>
-                                </c:choose>
-                            </td>
-                        </tr>
-                        </c:forEach>
+                            <c:forEach var="item" items="${shippingItems}">
+                                <tr>
+                                    <td>${item.orderId}</td>
+                                    <td>${item.destination}</td>
+                                    <td>${item.productId}</td>
+                                    <td>${item.quantity}</td>
+                                    <td>${item.carrier}</td>
+                                    <td>${item.trackingNumber}</td>
+                                    <td><fmt:formatDate value="${item.orderDate}" pattern="yyyy-MM-dd"/></td>
+                                    <td><fmt:formatDate value="${item.shippedAt}" pattern="yyyy-MM-dd HH:mm"/></td>
+                                    <td><fmt:formatDate value="${item.expectedArrival}" pattern="yyyy-MM-dd"/></td>
+                                    <td>${item.status}</td>
+                                </tr>
+                            </c:forEach>
                         </tbody>
-
                     </table>
                 </div>
             </div>

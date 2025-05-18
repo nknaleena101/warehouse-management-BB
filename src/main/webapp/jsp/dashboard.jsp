@@ -228,7 +228,7 @@
                                                     </td>
                                                     <td>
                                                         <span class="badge px-3 py-2 rounded-pill
-                                                            ${asn.status == 'Received' ? 'bg-success-subtle text-success' : 'bg-warning-subtle text-warning'}">
+                                                            ${asn.status == 'Received' ? 'bg-success-subtle text-success' : 'bg-success-subtle text-secondary'}">
                                                             ${asn.status}
                                                         </span>
                                                     </td>
