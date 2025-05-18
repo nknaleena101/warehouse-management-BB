@@ -292,10 +292,6 @@
                 </div>
 
                 <button type="submit" class="login-btn">Sign In</button>
-
-                <div class="register-link">
-                    Don't have an account? <a href="register.jsp">Register now</a>
-                </div>
             </form>
         </div>
     </div>
