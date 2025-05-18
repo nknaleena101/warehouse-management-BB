@@ -62,9 +62,11 @@
 <div class="main-content">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Inbound Processing</h2>
-        <!-- <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createASNModal">
-            <i class="bi bi-plus-circle"></i> Create ASN
-         </button> -->
+        <a href="#" onclick="window.location.href='/warehouse_system/asn'">
+           <button class="btn btn-primary" >
+                <i class="bi bi-plus-circle"></i> Create ASN
+            </button>
+        </a>
     </div>
 
     <!-- Process Steps -->
@@ -142,7 +144,7 @@
                         <div class="location-grid">
                             <c:forEach var="location" items="${locations}">
                                 <div class="location-cell" data-location="${location.zone}-${location.rack}-${location.shelf}">
-                                        ${location.zone}-${location.rack}-${location.shelf}<br>Location Name
+                                        ${location.zone}-${location.rack}-${location.shelf}<br>
                                 </div>
                             </c:forEach>
                         </div>

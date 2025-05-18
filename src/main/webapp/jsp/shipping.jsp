@@ -24,6 +24,74 @@
         .shipped-card:hover {
             box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
         }
+
+        /* Color-only changes to match blue sidebar */
+        .btn-primary {
+            background-color: #3B82F6;
+            border-color: #3B82F6;
+        }
+
+        .btn-primary:hover, .btn-primary:focus {
+            background-color: #2563EB;
+            border-color: #2563EB;
+        }
+
+        .table-primary, .table-primary > th, .table-primary > td {
+            background-color: rgba(59, 130, 246, 0.1);
+        }
+
+        .text-primary {
+            color: #3B82F6 !important;
+        }
+
+        .border-primary {
+            border-color: #3B82F6 !important;
+        }
+
+        .bg-primary {
+            background-color: #3B82F6 !important;
+        }
+
+        .form-check-input:checked {
+            background-color: #3B82F6;
+            border-color: #3B82F6;
+        }
+
+        .form-check-input:focus {
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
+        }
+
+        .form-control:focus, .form-select:focus {
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 0 0 0.25rem rgba(59, 130, 246, 0.25);
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        /* Status badges with blue theme */
+        .status-transit {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #3B82F6;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.875rem;
+        }
+
+        .status-delivered {
+            background-color: rgba(25, 135, 84, 0.1);
+            color: #198754;
+        }
+
+        .status-pending {
+            background-color: rgba(96, 165, 250, 0.1);
+            color: #60A5FA;
+        }
     </style>
 </head>
 <body>
@@ -37,50 +105,43 @@
             </button>
         </div>
 
-        <!-- Ship Order Modal -->
+        <!-- Shipping Modal -->
         <div class="modal fade" id="shipOrderModal" tabindex="-1" aria-labelledby="shipOrderModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="shipOrderModalLabel">Ship Order</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="modal-body">
-                        <form id="shippingForm">
+                    <form action="${pageContext.request.contextPath}/shipping-process" method="post">
+                        <div class="modal-body">
                             <div class="mb-3">
-                                <label for="orderSelect" class="form-label">Select Order</label>
-                                <select class="form-select" id="orderSelect" required>
-                                    <option value="">Select an order to ship</option>
-                                    <option value="ORD-1003" data-items="PROD-1001 (2), PROD-1005 (1)">ORD-1003 - 789 Pine Rd, Elsewhere (3 items)</option>
-                                    <option value="ORD-1005" data-items="PROD-1002 (1), PROD-1004 (2)">ORD-1005 - 654 Maple Ave, Somewhere (3 items)</option>
-                                    <option value="ORD-1006" data-items="PROD-1003 (5)">ORD-1006 - 987 Cedar Ln, Nowhere (5 items)</option>
+                                <label for="orderId" class="form-label">Order</label>
+                                <select class="form-select" id="orderId" name="orderId" required>
+                                    <option value="" selected disabled>Select an order</option>
+                                    <c:forEach var="order" items="${packedOrders}">
+                                        <option value="${order.orderId}">Order #${order.orderId} - ${order.destination}</option>
+                                    </c:forEach>
                                 </select>
-                                <div class="mt-2" id="orderItemsPreview">
-                                    <!-- Will be populated by JavaScript -->
-                                </div>
                             </div>
-
-                            <div class="row mb-3">
-                                <div class="col-md-6">
-                                    <label for="carrierName" class="form-label">Carrier Name</label>
-                                    <input type="text" class="form-control" id="carrierName" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label for="trackingNumber" class="form-label">Tracking Number</label>
-                                    <input type="text" class="form-control" id="trackingNumber" required>
-                                </div>
+                            <div class="mb-3">
+                                <label for="carrier" class="form-label">Carrier Name</label>
+                                <input type="text" class="form-control" id="carrier" name="carrier" required>
                             </div>
-
+                            <div class="mb-3">
+                                <label for="trackingNumber" class="form-label">Tracking Number</label>
+                                <input type="text" class="form-control" id="trackingNumber" name="trackingNumber" required>
+                            </div>
                             <div class="mb-3">
                                 <label for="expectedArrival" class="form-label">Expected Arrival Date</label>
-                                <input type="date" class="form-control" id="expectedArrival" required>
+                                <input type="date" class="form-control" id="expectedArrival" name="expectedArrival" required>
                             </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" id="confirmShipment">Complete Shipment</button>
-                    </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Complete Shipment</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -97,46 +158,31 @@
                             <tr>
                                 <th>Order ID</th>
                                 <th>Destination</th>
-                                <th>Items Shipped</th>
+                                <th>Product ID</th>
+                                <th>Quantity</th>
                                 <th>Carrier</th>
                                 <th>Tracking #</th>
+                                <th>Order Date</th>
                                 <th>Shipped Date</th>
                                 <th>Expected Arrival</th>
                                 <th>Status</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <!-- Sample data - replace with JSTL/EL from your backend -->
-                            <tr>
-                                <td>ORD-1001</td>
-                                <td>123 Main St, Anytown</td>
-                                <td>3 items</td>
-                                <td>UPS</td>
-                                <td>1Z12345E0291980793</td>
-                                <td>2023-07-16</td>
-                                <td>2023-07-19</td>
-                                <td><span class="badge bg-primary">Shipped</span></td>
-                            </tr>
-                            <tr>
-                                <td>ORD-1002</td>
-                                <td>456 Oak Ave, Somewhere</td>
-                                <td>2 items</td>
-                                <td>FedEx</td>
-                                <td>612345678901</td>
-                                <td>2023-07-17</td>
-                                <td>2023-07-20</td>
-                                <td><span class="badge bg-primary">Shipped</span></td>
-                            </tr>
-                            <tr>
-                                <td>ORD-1004</td>
-                                <td>321 Elm St, Nowhere</td>
-                                <td>1 item</td>
-                                <td>USPS</td>
-                                <td>9400100000000000000000</td>
-                                <td>2023-07-18</td>
-                                <td>2023-07-22</td>
-                                <td><span class="badge bg-primary">Shipped</span></td>
-                            </tr>
+                            <c:forEach var="item" items="${shippingItems}">
+                                <tr>
+                                    <td>${item.orderId}</td>
+                                    <td>${item.destination}</td>
+                                    <td>${item.productId}</td>
+                                    <td>${item.quantity}</td>
+                                    <td>${item.carrier}</td>
+                                    <td>${item.trackingNumber}</td>
+                                    <td><fmt:formatDate value="${item.orderDate}" pattern="yyyy-MM-dd"/></td>
+                                    <td><fmt:formatDate value="${item.shippedAt}" pattern="yyyy-MM-dd HH:mm"/></td>
+                                    <td><fmt:formatDate value="${item.expectedArrival}" pattern="yyyy-MM-dd"/></td>
+                                    <td>${item.status}</td>
+                                </tr>
+                            </c:forEach>
                         </tbody>
                     </table>
                 </div>
@@ -189,6 +235,25 @@
                 orderItemsPreview.innerHTML = '';
             });
         });
+    </script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Pre-fill order ID when clicking ship button
+        document.querySelectorAll('.ship-order-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const orderId = this.getAttribute('data-order-id');
+                document.getElementById('orderId').value = orderId;
+            });
+        });
+
+        // Handle success/error messages
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('success')) {
+            alert('Order shipped successfully!');
+        } else if (urlParams.has('error')) {
+            alert('Error shipping order. Please try again.');
+        }
+    });
     </script>
 </body>
 </html>
